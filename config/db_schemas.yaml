@@ -1,0 +1,7 @@
+dwh1:
+  src: "src"
+  dst: "dst"
+
+dwh2:
+  src: "src"
+  dst: "dst"
