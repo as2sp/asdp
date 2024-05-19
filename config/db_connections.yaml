@@ -1,5 +1,6 @@
 db_connections:
   dwh1_src:
+    DB: PostgreSQL
     DB_HOST: "192.168.40.200"
     DB_PORT: 5432
     DB_DB: "postgres"
@@ -9,6 +10,7 @@ db_connections:
     # URL: "jdbc:postgresql://{{ db_connections.dwh1_src.DB_HOST }}:{{ db_connections.dwh1_src.DB_PORT }}/{{ db_connections.dwh1_src.DB_DB }}?user={{ db_connections.dwh1_src.DB_USER }}&password={{ db_connections.dwh1_src.DB_PASSWORD }}"
 
   dwh1_dst:
+    DB: PostgreSQL
     DB_HOST: "192.168.40.200"
     DB_PORT: 5432
     DB_DB: "postgres"
@@ -16,3 +18,22 @@ db_connections:
     DB_PASSWORD: "pass"
     URL: "jdbc:postgresql://192.168.40.200:5432/postgres?user=user&password=pass"
     # URL: "jdbc:postgresql://{{ db_connections.dwh1_dst.DB_HOST }}:{{ db_connections.dwh1_dst.DB_PORT }}/{{ db_connections.dwh1_dst.DB_DB }}?user={{ db_connections.dwh1_dst.DB_USER }}&password={{ db_connections.dwh1_dst.DB_PASSWORD }}"
+
+
+  dwh2_src:
+    DB: Oracle
+    DB_HOST: "192.168.40.200"
+    DB_PORT: 1521
+    DB_DB: "oracle-xe"
+    DB_USER: "admin"
+    DB_PASSWORD: "123"
+    URL: "jdbc:oracle:thin:@192.168.40.200:1521/orcl?user=admin&password=pass"
+
+  dwh2_dst:
+    DB: Oracle
+    DB_HOST: "192.168.40.200"
+    DB_PORT: 1521
+    DB_DB: "oracle-xe"
+    DB_USER: "admin"
+    DB_PASSWORD: "123"
+    URL: "jdbc:oracle:thin:@192.168.40.200:1521/orcl?user=admin&password=pass"

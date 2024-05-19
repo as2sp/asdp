@@ -5,11 +5,11 @@ from models.pipeline import PipelineConfig
 
 
 def get_spark_session() -> SparkSession:
-    spark = SparkSession.builder \
-        .appName("DataProcessorApp") \
-        .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar") \
-        .getOrCreate()
-    return spark
+   spark = SparkSession.builder \
+       .appName("DataProcessorApp") \
+       .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar:lib/ojdbc11.jar") \
+       .getOrCreate()
+   return spark
 
 
 class BaseDataProcessor:

@@ -5,7 +5,7 @@ extract:
     params: {}
 
 transform:
-  - operation: "set_columns_to_null"
+  - operation: set_columns_to_null
     params:
       column_names: ["description"]
 
