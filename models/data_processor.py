@@ -27,10 +27,15 @@ class BaseDataProcessor:
     def join(self, dfs: Union[DataFrame, List[DataFrame]], joiner: Optional[Tuple] = None) -> DataFrame:
         pass
 
+
+class DataProcessor(BaseDataProcessor):
+    def processor_exception(self, message: str):
+        raise Exception(message)
+
     def run(self) -> None:
+        data_processor_logger.debug("Starting pipeline execution")
         data_processor_logger.debug("Starting extract phase")
         dfs = self.extract()
-
         if not dfs:
             data_processor_logger.info("No data extracted. Exiting the run method")
             return
@@ -44,6 +49,7 @@ class BaseDataProcessor:
                 df = dfs if isinstance(dfs, DataFrame) else dfs[0]
         else:
             df = dfs if isinstance(dfs, DataFrame) else dfs[0]
+
         data_processor_logger.debug("Starting transform phase")
         if "transform" in self.config.config:
             df = self.transform(df)
@@ -53,14 +59,10 @@ class BaseDataProcessor:
             if joiner_before_load:
                 data_processor_logger.debug("Joining dataframes before load phase")
                 df = self.join(df, joiner_before_load)
+
         data_processor_logger.debug("Starting load phase")
         self.load(df)
         data_processor_logger.debug("Pipeline execution finished")
-
-
-class DataProcessor(BaseDataProcessor):
-    def processor_exception(self, message: str):
-        raise Exception(message)
 
     def extract(self) -> Union[DataFrame, List[DataFrame]]:
         data_processor_logger.info("Extracting data")
