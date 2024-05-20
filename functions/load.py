@@ -1,7 +1,5 @@
-from logging_config import setup_logging, loader_logger
+from logging_config import loader_logger
 from pyspark.sql import DataFrame
-
-setup_logging()
 
 
 def loader_jdbc(df: DataFrame, url: str, table_name: str, **params) -> None:

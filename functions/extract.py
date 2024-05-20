@@ -1,7 +1,5 @@
-from logging_config import setup_logging, extractor_logger
+from logging_config import extractor_logger
 from pyspark.sql import SparkSession, DataFrame
-
-setup_logging()
 
 
 def extractor_jdbc(spark: SparkSession, url: str, table_name: str, **params) -> DataFrame:

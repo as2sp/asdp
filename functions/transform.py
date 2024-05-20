@@ -1,4 +1,4 @@
-from logging_config import setup_logging, transformer_logger
+from logging_config import transformer_logger
 from typing import Any, List
 import sqlalchemy as sa
 from pyspark.sql import DataFrame
@@ -6,8 +6,6 @@ import pyspark.sql.functions as F
 from pyspark.sql.functions import lit
 from pyspark.sql.types import DecimalType, ArrayType, TimestampType, DateType, BooleanType, StringType, DoubleType, \
     IntegerType
-
-setup_logging()
 
 
 def set_columns_to_null(df: DataFrame, column_names: list) -> DataFrame:

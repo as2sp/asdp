@@ -1,10 +1,8 @@
-from logging_config import setup_logging, data_processor_logger
+from logging_config import data_processor_logger
 from typing import Any, List, Tuple, Optional, Union
 from pyspark.sql import DataFrame
 from pyspark.sql.session import SparkSession
 from models.pipeline import PipelineConfig
-
-setup_logging()
 
 
 class BaseDataProcessor:
@@ -34,7 +32,7 @@ class BaseDataProcessor:
         dfs = self.extract()
 
         if not dfs:
-            print("No data extracted. Exiting the run method.")
+            data_processor_logger.info("No data extracted. Exiting the run method")
             return
 
         if isinstance(dfs, list) and self.config.joiners:

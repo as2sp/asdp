@@ -1,4 +1,4 @@
-from logging_config import setup_logging, pipeline_builder_logger
+from logging_config import pipeline_builder_logger
 import yaml
 from typing import List, Tuple, Dict
 from jinja2 import Template
@@ -6,8 +6,6 @@ import functions.extract as extract_functions
 import functions.transform as transform_functions
 import functions.load as load_functions
 import functions.join as join_functions
-
-setup_logging()
 
 # You can add new config YAML here
 config_files = ['config/db_connections.yaml',
