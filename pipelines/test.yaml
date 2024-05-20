@@ -1,11 +1,11 @@
 extract:
   - operation: extractor_jdbc
-    url: "{{ db_connections.dwh2_src.URL }}"
+    url: "{{ db_connections.dwh1_src.URL }}"
     table_name: "src.test1"
     params: {}
 
 load:
   - operation: loader_jdbc
-    url: "{{ db_connections.dwh2_dst.URL }}"
+    url: "{{ db_connections.dwh1_dst.URL }}"
     table_name: "dst.test2"
     params: {}

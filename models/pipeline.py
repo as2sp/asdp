@@ -1,3 +1,4 @@
+import logging
 import yaml
 from typing import List, Tuple, Dict
 from jinja2 import Template
@@ -6,6 +7,7 @@ import functions.transform as transform_functions
 import functions.load as load_functions
 import functions.join as join_functions
 
+logger = logging.getLogger('pipeline configs')
 
 # You can add new config YAML here
 config_files = ['config/db_connections.yaml',
@@ -33,6 +35,8 @@ class PipelineConfig:
                 additional_configs.update(yaml.safe_load(f))
 
         config = self._render_config(config, additional_configs)
+        logger.debug('Config files: %s', config_files)
+        logger.debug(f"Config loaded.")
         return config
 
     def _render_config(self, config: Dict, additional_configs: Dict) -> Dict:
@@ -56,6 +60,7 @@ class PipelineConfig:
                     functions.append((func, url, table_name, params))
                 else:
                     functions.append((func, params))
+        logger.debug(f"ETL functions defined.")
         return functions
 
     def _get_function_by_name(self, name: str, section: str):

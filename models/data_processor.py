@@ -1,14 +1,18 @@
+import logging
 from typing import Any, List, Tuple, Optional, Union
 from pyspark.sql import DataFrame
 from pyspark.sql.session import SparkSession
 from models.pipeline import PipelineConfig
 
+logger = logging.getLogger('data processor')
+
 
 def get_spark_session() -> SparkSession:
    spark = SparkSession.builder \
        .appName("DataProcessorApp") \
-       .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar:lib/ojdbc11.jar") \
+        .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar:lib/ojdbc11.jar") \
        .getOrCreate()
+   logger.debug(f"Spark session created.")
    return spark
 
 
@@ -66,6 +70,7 @@ class DataProcessor(BaseDataProcessor):
         for func, url, table_name, params in self.config.extractors:
             df = func(spark, url, table_name, **params)
             dfs.append(df)
+        logger.debug(f"Extractor created.")
         return dfs[0] if len(dfs) == 1 else dfs
 
     def transform(self, df: Union[DataFrame, List[DataFrame]]) -> Union[DataFrame, List[DataFrame]]:
@@ -76,13 +81,14 @@ class DataProcessor(BaseDataProcessor):
         for func, params in self.config.transformers:
             params = {**params, **self.params}
             dfs = [func(d, **params) for d in dfs]
-
+        logger.debug(f"Transformerr created.")
         return dfs if len(dfs) > 1 else dfs[0]
 
     def load(self, df: Union[DataFrame, List[DataFrame]]) -> None:
         for func, url, table_name, params in self.config.loaders:
             for d in (df if isinstance(df, list) else [df]):
                 func(d, url, table_name, **params)
+        logger.debug(f"Loader created.")
 
     def join(self, dfs: Union[DataFrame, List[DataFrame]], joiner: Optional[Tuple] = None) -> DataFrame:
         if not dfs:
@@ -96,4 +102,5 @@ class DataProcessor(BaseDataProcessor):
 
         func, params = joiner
         params = {**params, **self.params}
+        logger.debug(f"Joiner created.")
         return func(dfs, **params)
