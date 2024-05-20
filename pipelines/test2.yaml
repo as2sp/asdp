@@ -1,16 +1,16 @@
 extract:
   - operation: extractor_jdbc
-    url: "{{ db_connections.dwh1_src.URL }}"
-    table_name: "src.test1"
-    params: {}
+    parameters:
+      url: "{{ db_connections.dwh1_src.URL }}"
+      table_name: "src.test1"
 
 transform:
   - operation: set_columns_to_null
-    params:
+    parameters:
       column_names: ["description"]
 
 load:
   - operation: loader_jdbc
-    url: "{{ db_connections.dwh1_dst.URL }}"
-    table_name: "dst.test3"
-    params: {}
+    parameters:
+      url: "{{ db_connections.dwh1_dst.URL }}"
+      table_name: "dst.test3"

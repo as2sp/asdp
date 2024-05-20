@@ -47,16 +47,11 @@ class PipelineConfig:
         if key in self.config:
             for item in self.config[key]:
                 func_name = item["operation"]
-                params = item.get("params", {})
-                url = item.get("url")
-                table_name = item.get("table_name")
+                params = item.get("parameters", {})
                 func = self._get_function_by_name(func_name, key)
                 if func is None:
                     raise ValueError(f"Function {func_name} not found in {key} section")
-                if key in ["extract", "load"]:
-                    functions.append((func, url, table_name, params))
-                else:
-                    functions.append((func, params))
+                functions.append((func, params))
         pipeline_builder_logger.debug(f"ETL functions defined")
         return functions
 

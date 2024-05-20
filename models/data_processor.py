@@ -65,8 +65,9 @@ class DataProcessor(BaseDataProcessor):
     def extract(self) -> Union[DataFrame, List[DataFrame]]:
         data_processor_logger.info("Extracting data")
         dfs = []
-        for func, url, table_name, params in self.config.extractors:
-            df = func(self.spark, url, table_name, **params)
+        for extractor in self.config.extractors:
+            func, params = extractor
+            df = func(self.spark, **params)
             dfs.append(df)
         data_processor_logger.info("Data extraction completed")
         return dfs[0] if len(dfs) == 1 else dfs
@@ -91,9 +92,10 @@ class DataProcessor(BaseDataProcessor):
             for d in df:
                 d.cache()
 
-        for func, url, table_name, params in self.config.loaders:
+        for loader in self.config.loaders:
+            func, params = loader
             for d in (df if isinstance(df, list) else [df]):
-                func(d, url, table_name, **params)
+                func(d, **params)
         data_processor_logger.info("Data loading completed")
 
     def join(self, dfs: Union[DataFrame, List[DataFrame]], joiner: Optional[Tuple] = None) -> DataFrame:
