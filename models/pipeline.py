@@ -17,7 +17,6 @@ class PipelineConfig:
         self.config_files = config_files
         self.config_path = config_path
         self.config = self._load_config(config_path)
-        self.settings = self.config.get("settings", {})
         self.extractors = self._load_functions("extract")
         self.transformers = self._load_functions("transform")
         self.loaders = self._load_functions("load")

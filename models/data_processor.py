@@ -85,12 +85,11 @@ class DataProcessor(BaseDataProcessor):
 
     def load(self, df: Union[DataFrame, List[DataFrame]]) -> None:
         data_processor_logger.info("Loading data")
-        if self.config.settings.get("use_cache_in_loaders") is True:
-            if isinstance(df, DataFrame):
-                df.cache()
-            else:
-                for d in df:
-                    d.cache()
+        if isinstance(df, DataFrame):
+            df.cache()
+        else:
+            for d in df:
+                d.cache()
 
         for func, url, table_name, params in self.config.loaders:
             for d in (df if isinstance(df, list) else [df]):
