@@ -7,17 +7,15 @@ from models.pipeline import PipelineConfig
 logger = logging.getLogger('data processor')
 
 
-def get_spark_session() -> SparkSession:
-   spark = SparkSession.builder \
-       .appName("DataProcessorApp") \
-        .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar:lib/ojdbc11.jar") \
-       .getOrCreate()
-   logger.debug(f"Spark session created.")
-   return spark
-
-
 class BaseDataProcessor:
     def __init__(self, config: PipelineConfig, **params: Any):
+        self.spark = SparkSession.builder \
+            .appName("DataProcessorApp") \
+            .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar") \
+            .getOrCreate()
+
+        logger.debug(f"Spark session created.")
+
         self.params = params
         self.config = config
 
@@ -65,11 +63,11 @@ class DataProcessor(BaseDataProcessor):
         raise Exception(message)
 
     def extract(self) -> Union[DataFrame, List[DataFrame]]:
-        spark = get_spark_session()
         dfs = []
         for func, url, table_name, params in self.config.extractors:
-            df = func(spark, url, table_name, **params)
+            df = func(self.spark, url, table_name, **params)
             dfs.append(df)
+
         logger.debug(f"Extractor created.")
         return dfs[0] if len(dfs) == 1 else dfs
 
@@ -81,13 +79,22 @@ class DataProcessor(BaseDataProcessor):
         for func, params in self.config.transformers:
             params = {**params, **self.params}
             dfs = [func(d, **params) for d in dfs]
-        logger.debug(f"Transformerr created.")
+
+        logger.debug(f"Transformer created.")
         return dfs if len(dfs) > 1 else dfs[0]
 
     def load(self, df: Union[DataFrame, List[DataFrame]]) -> None:
+        if self.config.settings.get("use_cache_in_loaders") is True:
+            if isinstance(df, DataFrame):
+                df.cache()
+            else:
+                for d in df:
+                    d.cache()
+
         for func, url, table_name, params in self.config.loaders:
             for d in (df if isinstance(df, list) else [df]):
                 func(d, url, table_name, **params)
+
         logger.debug(f"Loader created.")
 
     def join(self, dfs: Union[DataFrame, List[DataFrame]], joiner: Optional[Tuple] = None) -> DataFrame:
@@ -102,5 +109,6 @@ class DataProcessor(BaseDataProcessor):
 
         func, params = joiner
         params = {**params, **self.params}
+
         logger.debug(f"Joiner created.")
         return func(dfs, **params)
