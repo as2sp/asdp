@@ -1,14 +1,12 @@
-import logging
+from logging_config import setup_logging, extractor_logger
 from pyspark.sql import SparkSession, DataFrame
 
-logger = logging.getLogger('extractors')
+setup_logging()
 
 
 def extractor_jdbc(spark: SparkSession, url: str, table_name: str, **params) -> DataFrame:
-
-    logger.info(f"Started extractor_jdbc function")
-    logger.debug(f"extractor_jdbc called with arguments: {locals()}")
-
+    extractor_logger.info(f"Started extractor_jdbc function")
+    extractor_logger.debug(f"extractor_jdbc called with arguments: {locals()}")
     df = spark.read.format("jdbc").options(
         url=url,
         dbtable=table_name,
