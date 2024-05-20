@@ -1,39 +1,44 @@
 extract:
-  - url: "jdbc:postgresql://{{ db_connections.dwh1_src.DB_HOST }}:{{ db_connections.dwh1_src.DB_PORT }}/{{ db_connections.dwh1_src.DB_DB }}?user={{ db_connections.dwh1_src.DB_USER }}&password={{ db_connections.dwh1_src.DB_PASSWORD }}"
-    operation: "extract_func1"
-    params:
+  - operation: "extract_func1"
+    parameters:
       param1: "value1"
       param2: "value2"
 
   - operation: "extract_func2"
-    params:
+    parameters:
       param1: "value1"
       param2: "value2"
 
 join_before_transform:
-  operation: "join_func1"
-  params:
-    param1: "value1"
+  - operation: "join_func1"
+    parameters:
+      param1: "value1"
+      param2: "value2"
 
 transform:
   - operation: "transform_func1"
-    params:
+    parameters:
       param1: "value1"
+      param2: "value2"
 
   - operation: "transform_func2"
-    params:
+    parameters:
       param1: "value1"
+      param2: "value2"
 
 join_before_load:
-  operation: "join_func2"
-  params:
-    param1: "value1"
+  - operation: "join_func2"
+    parameters:
+      param1: "value1"
+      param2: "value2"
 
 load:
   - operation: "load_func1"
-    params:
+    parameters:
       param1: "value1"
+      param2: "value2"
 
   - operation: "load_func2"
-    params:
+    parameters:
       param1: "value1"
+      param2: "value2"
