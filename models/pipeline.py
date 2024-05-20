@@ -36,7 +36,7 @@ class PipelineConfig:
 
         config = self._render_config(config, additional_configs)
         logger.debug('Config files: %s', config_files)
-        logger.debug(f"Config loaded.")
+        logger.debug(f"Config loaded")
         return config
 
     def _render_config(self, config: Dict, additional_configs: Dict) -> Dict:
@@ -60,7 +60,7 @@ class PipelineConfig:
                     functions.append((func, url, table_name, params))
                 else:
                     functions.append((func, params))
-        logger.debug(f"ETL functions defined.")
+        logger.debug(f"ETL functions defined")
         return functions
 
     def _get_function_by_name(self, name: str, section: str):

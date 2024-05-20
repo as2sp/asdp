@@ -12,7 +12,7 @@ logger = logging.getLogger('transformers')
 
 def set_columns_to_null(df: DataFrame, column_names: list) -> DataFrame:
 
-    logger.info(f"Started set_columns_to_null function.")
+    logger.info(f"Started set_columns_to_null function")
     logger.debug(f"extractor_jdbc called with arguments: {locals()}")
 
     for column_name in column_names:
@@ -22,7 +22,7 @@ def set_columns_to_null(df: DataFrame, column_names: list) -> DataFrame:
 
 def rename_cols(df: DataFrame, rename_cols) -> DataFrame:
 
-    logger.info(f"Started rename_cols function.")
+    logger.info(f"Started rename_cols function")
     logger.debug(f"rename_cols called with arguments: {locals()}")
 
     for old_column, new_column in rename_cols.items():
@@ -32,7 +32,7 @@ def rename_cols(df: DataFrame, rename_cols) -> DataFrame:
 
 def drop_cols(df: DataFrame, drop_cols: list) -> DataFrame:
 
-    logger.info(f"Started drop_cols function.")
+    logger.info(f"Started drop_cols function")
     logger.debug(f"drop_cols called with arguments: {locals()}")
 
     if not drop_cols:
@@ -45,7 +45,7 @@ def drop_cols(df: DataFrame, drop_cols: list) -> DataFrame:
 
 def drop_duplicates(df: DataFrame, drop_dup_cols: list) -> DataFrame:
 
-    logger.info(f"Started drop_duplicates function.")
+    logger.info(f"Started drop_duplicates function")
     logger.debug(f"drop_duplicates called with arguments: {locals()}")
 
     if not drop_dup_cols:
@@ -57,7 +57,7 @@ def drop_duplicates(df: DataFrame, drop_dup_cols: list) -> DataFrame:
 
 def drop_rows_with_null_in_notnull_cols(df: DataFrame, not_null: list) -> DataFrame:
 
-    logger.info(f"Started drop_rows_with_null_in_notnull_cols function.")
+    logger.info(f"Started drop_rows_with_null_in_notnull_cols function")
     logger.debug(f"drop_rows_with_null_in_notnull_cols called with arguments: {locals()}")
 
     if not not_null:
@@ -70,7 +70,7 @@ def drop_rows_with_null_in_notnull_cols(df: DataFrame, not_null: list) -> DataFr
 
 def fill_cols_with_value(df: DataFrame, cols) -> DataFrame:
 
-    logger.info(f"Started fill_cols_with_value function.")
+    logger.info(f"Started fill_cols_with_value function")
     logger.debug(f"fill_cols_with_value called with arguments: {locals()}")
 
     for col_name, col_value in cols.items():
@@ -80,7 +80,7 @@ def fill_cols_with_value(df: DataFrame, cols) -> DataFrame:
 
 def fill_nulls(df: DataFrame, col, new_val) -> DataFrame:
 
-    logger.info(f"Started fill_nulls function.")
+    logger.info(f"Started fill_nulls function")
     logger.debug(f"fill_nulls called with arguments: {locals()}")
 
     return df.fillna({col: new_val})
@@ -88,7 +88,7 @@ def fill_nulls(df: DataFrame, col, new_val) -> DataFrame:
 
 def set_col_equal_another_col(df: DataFrame, src_col, dest_col) -> DataFrame:
 
-    logger.info(f"Started set_col_equal_another_col function.")
+    logger.info(f"Started set_col_equal_another_col function")
     logger.debug(f"set_col_equal_another_col called with arguments: {locals()}")
 
     return df.withColumn(dest_col, df[src_col])
@@ -96,7 +96,7 @@ def set_col_equal_another_col(df: DataFrame, src_col, dest_col) -> DataFrame:
 
 def add_postgres_cols(df: DataFrame, new_cols) -> DataFrame:
 
-    logger.info(f"Started add_postgres_cols function.")
+    logger.info(f"Started add_postgres_cols function")
     logger.debug(f"add_postgres_cols called with arguments: {locals()}")
 
     for col_name, col_type in new_cols.items():

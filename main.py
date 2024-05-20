@@ -20,7 +20,7 @@ def run_pipeline(config_path: str):
 
 
 if __name__ == "__main__":
-    logger.info(f"App started.")
+    logger.info(f"App started")
     config_paths = [
         "pipelines/test.yaml",
         "pipelines/test2.yaml"
