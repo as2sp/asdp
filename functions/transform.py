@@ -163,3 +163,37 @@ def add_postgres_columns(df: DataFrame, new_cols) -> DataFrame:
             col_type = ArrayType()
         df = df.withColumn(col_name, lit(None).cast(col_type))
     return df
+
+
+def spark_repartition(df: DataFrame, num_partitions: int) -> DataFrame:
+    """
+    Repartitions the given DataFrame into the specified number of partitions.
+
+    :param df: The Spark DataFrame to be repartitioned.
+    :param num_partitions: The number of partitions to repartition the DataFrame into.
+    :return: The repartitioned DataFrame.
+    """
+    transformer_logger.info(f"Started spark_repartition function")
+    transformer_logger.debug(f"spark_repartition called with arguments: {locals()}")
+    return df.repartition(num_partitions)
+
+
+def spark_coalesce(df: DataFrame, num_partitions: int) -> DataFrame:
+    """
+    Coalesces the given DataFrame into the specified number of partitions if the current number of partitions is greater
+    than the specified number. Otherwise, returns the DataFrame without any changes.
+
+    :param df: The Spark DataFrame to be coalesced.
+    :param num_partitions: The number of partitions to coalesce the DataFrame into.
+    :return: The coalesced DataFrame or the original DataFrame if the number of partitions is less than or equal to
+             the specified number.
+    """
+    transformer_logger.info(f"Started spark_coalesce function")
+    transformer_logger.debug(f"spark_coalesce called with arguments: {locals()}")
+    current_partitions = df.rdd.getNumPartitions()
+    if current_partitions > num_partitions:
+        return df.coalesce(num_partitions)
+    else:
+        transformer_logger.warning(f"Cannot coalesce DataFrame into {num_partitions} partitions as it already has "
+                                    f"{current_partitions} partitions. Return original DataFrame.")
+        return df
