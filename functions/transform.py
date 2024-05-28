@@ -64,9 +64,9 @@ def fill_cols_with_value(df: DataFrame, cols) -> DataFrame:
     return df
 
 
-def fill_nulls(df: DataFrame, col, new_val) -> DataFrame:
-    transformer_logger.info(f"Started fill_nulls function")
-    transformer_logger.debug(f"fill_nulls called with arguments: {locals()}")
+def fill_nulls_with_value(df: DataFrame, col, new_val) -> DataFrame:
+    transformer_logger.info(f"Started fill_nulls_with_value function")
+    transformer_logger.debug(f"fill_nulls_with_value called with arguments: {locals()}")
     return df.fillna({col: new_val})
 
 
