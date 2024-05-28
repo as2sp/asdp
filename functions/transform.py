@@ -170,6 +170,25 @@ def filter_dataframe(df: DataFrame, filter_conditions: dict, logical_operator: s
         return filtered_df
 
 
+def group_by_dataframe(df: DataFrame, group_cols: list, having_condition: str = None) -> DataFrame:
+    """
+    Groups the given DataFrame by the specified columns and applies the optional having condition.
+
+    :param df: The Spark DataFrame to be grouped.
+    :param group_cols: A list of column names to group by.
+    :param having_condition: An optional condition to apply after grouping (similar to SQL HAVING clause).
+    examples - "avg(salary) > 50000", "count > 10", "count(DISTINCT department_id) > 1" or compound condition -
+    "avg(salary) > 50000 AND sum(amount) > 1000"
+    :return: The grouped DataFrame.
+    """
+    transformer_logger.info("Started group_by_dataframe function")
+    transformer_logger.debug(f"group_by_dataframe called with arguments: {locals()}")
+    grouped_df = df.groupBy(*group_cols)
+    if having_condition:
+        grouped_df = grouped_df.agg(F.expr(having_condition))
+    return grouped_df
+
+
 def add_postgres_columns(df: DataFrame, new_cols) -> DataFrame:
     """
     Adds new columns with specified types to the given DataFrame, initializing them with null values.
