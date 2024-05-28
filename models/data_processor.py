@@ -9,7 +9,7 @@ class BaseDataProcessor:
     def __init__(self, config: PipelineConfig, **params: Any):
         self.spark = SparkSession.builder \
             .appName("DataProcessorApp") \
-            .config("spark.driver.extraClassPath", "lib/postgresql-42.7.3.jar") \
+            .config("spark.driver.extraClassPath", "db_drivers/postgresql-42.7.3.jar") \
             .getOrCreate()
         data_processor_logger.debug(f"Spark session created.")
         self.params = params
