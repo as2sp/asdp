@@ -133,6 +133,43 @@ def set_column_equal_another_column(df: DataFrame, src_col, dest_col) -> DataFra
     return df.withColumn(dest_col, df[src_col])
 
 
+def filter_dataframe(df: DataFrame, filter_conditions: dict, logical_operator: str = "AND") -> DataFrame:
+    """
+    Filters the given DataFrame based on the provided dictionary where keys are column names and values are filter
+    conditions. Multiple conditions for the same column are combined using the specified logical operator.
+    Allowed to use only one or two conditions for filtering!
+
+    :param df: The Spark DataFrame to be filtered.
+    :param filter_conditions: A dictionary where keys are column names and values are filter conditions.
+    :param logical_operator: The logical operator to use for combining multiple conditions for the same column.
+                              Can be 'AND' or 'OR'. Defaults to 'AND'.
+    :return: The filtered DataFrame.
+    """
+    transformer_logger.info("Started filter_dataframe function")
+    transformer_logger.debug(f"filter_dataframe called with arguments: {locals()}")
+    num_conditions = len(filter_conditions)
+    if num_conditions == 1:
+        col_name, filter_value = next(iter(filter_conditions.items()))
+        filtered_df = df.filter(df[col_name] == filter_value)
+        return filtered_df
+    elif num_conditions > 2:
+        transformer_logger.warning("More than two filter conditions provided. Returning the original DataFrame.")
+        return df
+    else:
+        condition_expressions = []
+        for col_name, filter_value in filter_conditions.items():
+            condition_expr = df[col_name] == filter_value
+            condition_expressions.append(condition_expr)
+        if logical_operator.upper() == "AND":
+            combined_condition = F.expr(" AND ".join([expr._jc.toString() for expr in condition_expressions]))
+        elif logical_operator.upper() == "OR":
+            combined_condition = F.expr(" OR ".join([expr._jc.toString() for expr in condition_expressions]))
+        else:
+            raise ValueError("Invalid logical operator. Must be 'AND' or 'OR'.")
+        filtered_df = df.filter(combined_condition)
+        return filtered_df
+
+
 def add_postgres_columns(df: DataFrame, new_cols) -> DataFrame:
     """
     Adds new columns with specified types to the given DataFrame, initializing them with null values.
