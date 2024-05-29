@@ -13,6 +13,12 @@ loader_logger = logging.getLogger('loader')
 
 
 def setup_logging():
+    """
+    Set up logging configuration for the application.
+
+    This function configures logging to output logs to both a file and the console.
+    The logging level and format are set according to the application's requirements.
+    """
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
