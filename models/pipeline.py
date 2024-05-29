@@ -13,7 +13,15 @@ config_files = ['config/db_connections.yaml',
 
 
 class PipelineConfig:
+    """
+    Class to load and manage pipeline configuration, including extracting, transforming, loading, and joining functions.
+    """
     def __init__(self, config_path: str):
+        """
+        Initialize the PipelineConfig.
+
+        :param config_path: Path to the main configuration file.
+        """
         self.config_files = config_files
         self.config_path = config_path
         self.config = self._load_config(config_path)
@@ -23,6 +31,12 @@ class PipelineConfig:
         self.joiners = self._load_functions("join")
 
     def _load_config(self, config_path: str) -> Dict:
+        """
+        Load the main and additional configuration files.
+
+        :param config_path: Path to the main configuration file.
+        :return: Merged configuration dictionary.
+        """
         with open(config_path, "r") as file:
             config = yaml.safe_load(file)
 
@@ -37,12 +51,25 @@ class PipelineConfig:
         return config
 
     def _render_config(self, config: Dict, additional_configs: Dict) -> Dict:
+        """
+        Render the configuration using Jinja2 templates.
+
+        :param config: Main configuration dictionary.
+        :param additional_configs: Additional configurations for rendering.
+        :return: Rendered configuration dictionary.
+        """
         config_str = yaml.dump(config)
         template = Template(config_str)
         rendered_config_str = template.render(additional_configs)
         return yaml.safe_load(rendered_config_str)
 
     def _load_functions(self, key: str) -> List[Tuple]:
+        """
+        Load ETL functions based on the configuration section.
+
+        :param key: Configuration section key ('extract', 'transform', 'load', 'join').
+        :return: List of tuples with functions and their parameters.
+        """
         functions = []
         if key in self.config:
             for item in self.config[key]:
@@ -56,6 +83,13 @@ class PipelineConfig:
         return functions
 
     def _get_function_by_name(self, name: str, section: str):
+        """
+        Retrieve a function by its name from the appropriate module.
+
+        :param name: Name of the function.
+        :param section: Section of the configuration ('extract', 'transform', 'load', 'join').
+        :return: Function object.
+        """
         module = None
         if section == "extract":
             module = extract_functions
