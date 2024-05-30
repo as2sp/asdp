@@ -73,7 +73,7 @@ class PipelineConfig:
         functions = []
         if key in self.config:
             for item in self.config[key]:
-                func_name = item["operation"]
+                func_name = item["operation"].lower()
                 params = item.get("parameters", {})
                 func = self._get_function_by_name(func_name, key)
                 if func is None:
