@@ -7,7 +7,7 @@ import functions.transform as transform_functions
 import functions.load as load_functions
 import functions.join as join_functions
 
-# You can add new config YAML here
+# You can add new YAML config here
 config_files = ['config/db_connections.yaml',
                 'config/db_schemas.yaml']
 
