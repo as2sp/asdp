@@ -2,13 +2,24 @@ from logging_config import loader_logger
 from pyspark.sql import DataFrame
 
 
-def loader_csv(df: DataFrame, **params) -> None:
-    loader_logger.info(f"Started loader_csv function")
+def loader_csv(df: DataFrame, path: str, mode: str, header: str, **params) -> None:
+    """
+    Loads data from a Spark DataFrame and writes it to CSV format.
+
+    :param df: The Spark DataFrame to be written to CSV.
+    :param path: The path where the CSV files will be saved.
+    :param mode: The mode of saving the CSV files. Possible values are 'append', 'overwrite',
+                 'ignore', 'error' (default: 'error').
+    :param header: Specifies whether to include a header line in the CSV files (default: 'true').
+    :param params: Additional parameters for the write operation.
+    :return: None
+    """
+    loader_logger.info("Started loader_csv function")
     loader_logger.debug(f"loader_csv called with arguments: {locals()}")
     df.write.csv(
-        path=params["path"],
-        mode=params["mode"],
-        header=params["header"],
+        path=params[path],
+        mode=params.get(mode, "error"),
+        header=params.get(header, "true")
     )
     return None
 
